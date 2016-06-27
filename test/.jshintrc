@@ -1,0 +1,7 @@
+{
+  "esnext": true,      
+  "node": true,
+  "mocha": true,
+  "asi": true, // optional semicolons
+  "expr": true // value.should.be.ok
+}

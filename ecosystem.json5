@@ -1,0 +1,60 @@
+/**
+ * Here we declare the apps that must be managed by PM2
+ * All options are listed here:
+ * https://github.com/Unitech/PM2/blob/master/ADVANCED_README.md#json-app-declaration
+ *
+ */
+
+// REPLACE all '_site' bellow with your 'project_site'
+
+{
+  "apps": [
+    {
+      "name": "_site",
+      "script": "./bin/www",
+      "exec_mode": "cluster",
+      "instances": 1,
+      "max_memory_restart": "100M",
+      "log_date_format"  : "DD HH:mm",
+      // don't split logs by process id
+      "merge_logs"  : true, 
+      "error_file": "/var/log/pm2/_site.err",
+      "out_file": "/var/log/pm2/_site.out",
+      "pid_file": "/srv/pm2/_site.pid",
+      "watch": false,
+      "env": {
+        // common variables
+        "pm_cwd": "/srv/www/_site/current",
+        "NODE_ENV": "production",
+        "DEBUG": "site:*,umedia:*,auth:*,-umedia:tag,-site:urls"
+      },
+      "env_vb0": {
+        NODE_ENV: "staging"
+      }
+    }
+  ],
+
+
+  /**
+   * https://github.com/Unitech/PM2/blob/master/ADVANCED_README.md#deployment-pm2--090
+   */
+  deploy : {
+    de1: {
+      user : "dvd",
+      host : "de1.matrix",
+      ref  : "origin/deploy",
+      repo : "file:///srv/repo/_site_deploy",
+      path : "/srv/www/_site",
+      "post-deploy" : '/srv/www/_site/current/bin/post_deploy de1',
+    },
+    vb0: {
+      user : "dvd",
+      host : "vb0.matrix",
+      ref  : "origin/deploy",
+      // deploy directly from build repo
+      repo : "file:///srv/repo/_site_build/",
+      path : "/srv/www/_site",
+      "post-deploy": '/srv/www/_site/current/bin/post_deploy vb0',
+    }
+  }
+}

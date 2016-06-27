@@ -1,0 +1,22 @@
+{
+  "restartable": "rs",
+  "verbose": true,
+  "script": "bin/www",
+  "ignore": [
+    ".git",
+    "node_modules",
+    "./**/*_flymake.js",
+    "client/",
+    "public/"
+  ],
+  "watch": [
+    "server/",
+    "../coect-umedia/server/"
+  ],
+  "ext": "js json",
+  "delay": 1000,
+  "env": {
+    "NODE_ENV": "development",
+    "DEBUG": "*,-site:urls,-wpml:*,-connect:*,-express:*,-pool2"
+  }
+}

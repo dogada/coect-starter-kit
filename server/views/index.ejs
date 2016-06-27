@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first -->
+    <title><% if (locals.title) { %><%= title  %> &#183; <% } %>mysite.com</title>
+    <% if (locals.path === '/') { %>
+    <link rel="me" href="https://twitter.com/mysite">
+    <link rel="feed" href="">
+    <% } %>
+    <link rel="webmention" href="https://webmention.io/mysite.com/webmention">
+    <link rel="pingback" href="http://webmention.io/webmention?forward=https://webmention.io/mysite.com/webmention">
+
+    <link rel="stylesheet" href="<%= asset('bootstrap/css/bootstrap.min.css', false)  %>">
+    <link rel="stylesheet" href="<%= asset('dist/font-awesome/css/font-awesome.min.css', false) %>">
+    
+    <!-- Place for riot tags scoped css -->
+    <style type="riot"></style>    
+    <link rel="stylesheet" href="<%= asset('dist/main.css', false) %>">
+    <% if (locals.canonicalUrl) { %>
+    <link rel="canonical" href="https://mysite.com/<%= canonicalUrl %>">
+    <% } %>
+
+    <meta name="version" content="<%= locals.version %>">
+    <meta name="csrf-token" content="<%= locals._csrf %>">
+
+    <meta property="fb:app_id" content="" /> 
+    <meta name="twitter:site" content="@mysite">
+    <meta name="twitter:creator" content="@mysite">
+
+    <% if (locals.title) { %>
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary">
+    <meta property="og:title" content="<%= locals.title || 'mysite.com' %>">
+    <meta property="og:url" content="https://mysite.com/<%= locals.canonicalUrl || path.slice(1) %>">
+    <% } %>
+
+    <% if (locals.description) { %>
+    <meta property="og:description" content="<%= description %>" >
+    <% } %>
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+  </head>
+
+  <body>
+    <% if (locals.layout) { %>
+    <%- layout %>
+    <% } else { %>
+    <site-layout />
+    <% } %>
+
+    <script>window.__INITIAL_STATE__ = <%- locals.state %></script>
+
+    <script src="<%= asset('dist/global_libs.js', false) %>"></script>
+    <script src="<%= asset('dist/libs.js') %>"></script>
+    <script src="<%= asset('dist/main.js') %>"></script>
+
+    <% if (locals.module) { %>
+    <script src="<%= asset('dist/' + module + '.js') %>"></script>
+    <% } %>
+
+    <% if (locals.analytics) { %>
+    <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-43028517-2', 'auto');
+    ga('require', 'linkid');
+    ga('send', 'pageview');
+    </script>
+    <% } %>
+
+  </body>
+</html>

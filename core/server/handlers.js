@@ -1,0 +1,18 @@
+var coect = require('coect')
+var api = require('./api')
+var tflow = require('tflow')
+
+exports.homepage = function(req, res, next) {
+  var flow = tflow([
+    () => api.homepage.overview(req, res, flow),
+    (state) => flow.complete({
+      page: {
+        view: 'site-homepage',
+        main: 'site-index',
+        aside: 'site-about',
+        title: 'Smart shopping',
+        data: {main: {state}}
+      },
+    })
+  ], coect.janus(req, res, next))
+}
