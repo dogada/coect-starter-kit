@@ -1,0 +1,71 @@
+#!/bin/bash -e
+
+# Source:
+# https://raw.githubusercontent.com/tgriesser/knex/master/scripts/release.sh
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+if [ $current_branch != 'master' ]; then
+    echo "You're on '$current_branch' branch. Please switch to 'master' and ensure you have merged required code."
+    exit 1
+fi
+
+git checkout master
+
+update_version() {
+  echo "$(node -p "p=require('./${1}');p.version='${2}';JSON.stringify(p,null,2)")" > $1
+  echo "Updated ${1} version to ${2}"
+}
+
+current_version=$(node -p "require('./package').version")
+
+printf "Next version (current is $current_version)? "
+read next_version
+
+if ! [[ $next_version =~ ^[0-9]\.[0-9]+\.[0-9](-.+)? ]]; then
+  echo "Version must be a valid semver string, e.g. 1.0.2 or 2.3.0-beta.1"
+  exit 1
+fi
+
+update_version 'package.json' $next_version
+
+if [ -e "./package-dev.json" ]; then
+    # copy dev environment if exist
+    cp ../../package.json ./package-dev.json
+fi
+
+git add -u
+#npm install --production
+npm run build
+#git add -A build
+
+if [ -d "./test" ]; then
+    npm test
+fi
+
+# FIX: update CHANGELOG.md
+
+git commit -am "release $next_version"
+git tag $next_version
+
+git push origin master
+git push origin master --tags
+
+# echo "# Publishing docs"
+# git checkout gh-pages
+# git merge master
+# git push origin gh-pages
+# git checkout master
+
+private=$(node -p "require('./package').private")
+
+if [ "$private" != "true" ]; then
+    echo "Publishing npm package..."
+    npm publish
+fi
+
+# indicate that we're in master and need to checkout a feature branch
+git checkout master
+
+if [ -e "./bin/release" ]; then
+    ./bin/release
+fi
