@@ -40,7 +40,7 @@
    */
   deploy : {
     de1: {
-      user : "dvd",
+      user : "username",
       host : "de1.matrix",
       ref  : "origin/deploy",
       repo : "file:///srv/repo/_site_deploy",
@@ -48,7 +48,7 @@
       "post-deploy" : '/srv/www/_site/current/bin/post_deploy de1',
     },
     vb0: {
-      user : "dvd",
+      user : "username",
       host : "vb0.matrix",
       ref  : "origin/deploy",
       // deploy directly from build repo
