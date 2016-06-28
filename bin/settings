@@ -1,0 +1,4 @@
+#! /bin/bash
+
+SITE="mysite"
+SITE_DOMAIN="mysite.com"

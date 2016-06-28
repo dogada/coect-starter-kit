@@ -1,0 +1,11 @@
+#! /bin/bash
+
+source ./bin/settings
+
+# pm2 requires PM2_HOME=/srv/pm2/.pm2 that is set in /etc/profile.d/pm2.sh
+
+#echo "Starting with env=$1"
+#pm2 startOrRestart ecosystem.json5 --env $1
+
+# should be launched on target host
+sudo su -l www-data -s /bin/bash -c "cd /srv/www/${SITE}_site/current && echo \"Reloading app for env=$1 as $(whoami) in $(pwd)\" && pm2 startOrRestart ecosystem.json5 --env $1"

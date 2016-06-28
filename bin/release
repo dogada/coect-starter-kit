@@ -1,0 +1,11 @@
+#! /bin/bash
+
+source ./bin/settings
+
+echo "Preparing build from current master branch on vb0.matrix vagrant box"
+echo "Release will be available in ${SITE}_site_deploy repos on vb0.matrix and $SITE_DOMAIN hosts"
+
+git push origin master --tags
+git push builder master --tags
+
+ssh vb0.matrix "cd /srv/repo/${SITE}_site_build && ./bin/build"

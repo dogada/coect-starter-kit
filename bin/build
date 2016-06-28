@@ -1,0 +1,25 @@
+#! /bin/bash
+
+
+source ./bin/settings
+
+cd /srv/repo/${SITE}_site_build
+
+echo "Started build on $(hostname):$(pwd) at $(date -R)" 
+
+git reset --hard && git merge master -m "Merged upstream" && time sl-build --scripts
+
+# list installed versions
+npm ls
+
+# make build available on dogada.org
+git push ssh://mysite/srv/repo/${SITE}_site_deploy deploy --tags
+
+# clear working dir
+git reset --hard
+git push
+
+# deploy current build on vb0
+pm2 deploy vb0
+
+echo "Finished build on $(hostname):$(pwd) at $(date -R)" 

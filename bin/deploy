@@ -1,0 +1,6 @@
+#! /bin/bash
+
+source ./bin/settings
+
+git push origin master && ./bin/post_release && pm2 deploy de1
+
